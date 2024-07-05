@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IntegrationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -7,9 +8,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/integrations', function () {
+    return view('integrations');
+});
+
+Route::get('/integrations/alienvault', [IntegrationController::class, 'getAlienVaultCredentials'])->middleware('auth:sanctum');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::post('/integrations/save', [IntegrationController::class, 'save'])->name('integrations.save');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
